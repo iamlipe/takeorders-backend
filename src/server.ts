@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 
 route.get('/', (req: Request, res: Response) => {
-  res.json({ message: `server is running on port ${PORT} aaaaaaaaa` })
+  res.json({ message: `server is running on port ${PORT}` })
 });
 
 app.use(route);
