@@ -1,0 +1,154 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id  String @id @default(uuid())
+  name String
+  email String
+  password String
+  phone String?
+
+  invoice Invoice?
+  stock Stock?
+  spent Spent?
+
+  clients Client[]
+  bills Bill[]
+
+  @@map("users")
+}
+
+model Bill {
+  id  String @id @default(uuid())
+  name String
+  email String?
+  phone String?
+  image String?
+  status Boolean
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  orders Order[]
+
+  @@map("bills")
+}
+
+model Category {
+  id  String @id @default(uuid())
+  name String
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Client {
+  id  String @id @default(uuid())
+  name String
+  phone String?
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("clients")
+}
+
+model Invoice {
+  id  String @id @default(uuid())
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  sales Sale[]
+
+  @@map("invoicing")
+}
+
+model Order {
+  id  String @id @default(uuid())
+  quantity Int
+  createdAt DateTime
+  updatedAt DateTime
+
+  productId String
+  product Product @relation(fields: [productId], references: [id])
+
+  billId String
+  bill Bill @relation(fields: [billId], references: [id])
+
+  @@map("orders")
+}
+
+model Product {
+  id  String @id @default(uuid())
+  name String
+  image String?
+  price Float
+  quanititySold Int
+
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id])
+
+  stockId String
+  stock Stock @relation(fields: [stockId], references: [id])
+
+  orders Order[]
+
+  @@map("products")
+}
+
+model Purchase {
+  id  String @id @default(uuid())
+  expanse String
+  description String
+  totalPrice Float
+  createdAt DateTime
+  updatedAt DateTime
+
+  spentId String @unique
+  spent Spent @relation(fields: [spentId], references: [id])
+
+  @@map("purchases")
+}
+
+model Sale {
+  id  String @id @default(uuid())
+  name String
+  totalPrice Float
+  createdAt DateTime
+  updatedAt DateTime
+
+  invoiceId String
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+
+  @@map("sales")
+}
+
+model Spent {
+  id  String @id @default(uuid())
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  purchases Purchase[]
+
+  @@map("spending")
+}
+
+model Stock {
+  id  String @id @default(uuid())
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  products Product[]
+
+  @@map("stock")
+}
