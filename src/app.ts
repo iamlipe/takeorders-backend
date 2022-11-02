@@ -1,0 +1,45 @@
+import 'express-async-errors';
+import * as express from 'express';
+import { LoginRouter } from './routes/login.routes';
+import { RegisterRouter } from './routes/register.routes';
+import { Error } from './middlewares/error';
+
+class App {
+  public app: express.Express;
+
+  constructor() {
+    this.app = express();
+    this.config();
+    this.route();
+  }
+
+  private config():void {
+    const accessControl: express.RequestHandler = (_req, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header(
+        'Access-Control-Allow-Methods',
+        'GET,POST,DELETE,OPTIONS,PUT,PATCH'
+      );
+      res.header('Access-Control-Allow-Headers', '*');
+      next();
+    };
+
+    this.app.use(accessControl);
+    this.app.use(express.json());
+  }
+
+  private route(): void {
+    this.app.use('/login', new LoginRouter().router);
+    this.app.use('/register', new RegisterRouter().router);
+
+    this.app.use(Error.yupError());
+    this.app.use(Error.domainError());
+    this.app.use(Error.serverError());
+  }
+
+  public start(PORT: string | number):void {
+    this.app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+  }
+}
+
+export { App };
