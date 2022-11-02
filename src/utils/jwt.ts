@@ -10,7 +10,11 @@ export default class JWT {
   }
 
   public sign(payload: TokenData) {
-    return jwt.sign(payload, this._password, { algorithm: 'HS256', expiresIn: '1h' });
+    return jwt.sign(
+      payload,
+      this._password,
+      { algorithm: 'HS256', expiresIn: '1h' }
+    );
   }
 
   public verify(token: string) {

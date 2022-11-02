@@ -1,38 +1,19 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": ["plugin:@typescript-eslint/recommended"],
-  "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
+  "extends": [
+    "standard",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:promise/recommended",
+    "prettier"
+  ],
+  "parserOptions": { "ecmaVersion": 2021, "sourceType": "module" },
+  "plugins": ["prettier", "@typescript-eslint"],
   "rules": {
-    "linebreak-style": 0,
-    "operator-linebreak": 0,
-    "no-console": [
-      "error",
-      {
-        "allow": ["warn", "info", "error"]
-      }
-    ],
-    "no-plusplus": 0,
-    "no-restricted-syntax": 0,
-    "guard-for-in": 0,
-    "no-continue": 0,
-    "prefer-promise-reject-CONSTANTS": 0,
-    "implicit-arrow-linebreak": 0,
-    "no-shadow": 0,
-    "function-paren-newline": 0,
-    "no-case-declarations": 0,
-    "max-len": 0,
-    "no-throw-literal": 0,
-    "func-names": "off",
-    "consistent-return": "off",
-    "import/no-extraneous-dependencies": "off",
-    "security/detect-object-injection": "off",
-    "security/detect-non-literal-fs-filename": "off",
-    "no-unused-vars": [
-      "error",
-      {
-        "args": "none"
-      }
-    ],
-    "no-await-in-loop": "off"
+    "semi": [2, "always"]
+  },
+  "env": {
+    "node": true
   }
 }

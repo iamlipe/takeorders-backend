@@ -1,4 +1,4 @@
-export default class ErrorDomain {
+export class ErrorHandler {
   public code: number;
   public message: string;
 
