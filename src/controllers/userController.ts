@@ -12,11 +12,11 @@ export class UserController {
   }
 
   public login = async(req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const login = req.body;
 
-    await validateLogin({ email, password });
+    await validateLogin(login);
 
-    const result = await this.UserService.login({ email, password });
+    const result = await this.UserService.login(login);
 
     res.status(StatusCodes.OK).json(result);
   };
@@ -36,15 +36,7 @@ export class UserController {
   };
 
   public register = async(req: Request, res: Response) => {
-    const { name, email, phone, password, confirmPassword } = req.body;
-
-    const newUser = {
-      name,
-      email,
-      phone,
-      password,
-      confirmPassword
-    };
+    const newUser = req.body;
 
     await validateRegister(newUser);
 

@@ -20,4 +20,10 @@ export class CategoryRepository {
   public async get(): Promise<Category[]> {
     return this.database.category.findMany();
   }
+
+  public async getById(id: string): Promise<Category> {
+    return this.database.category.findFirst({
+      where: { id }
+    })
+  }
 }

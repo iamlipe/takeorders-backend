@@ -68,7 +68,7 @@ CREATE TABLE `products` (
     `name` VARCHAR(191) NOT NULL,
     `image` VARCHAR(191) NULL,
     `price` DOUBLE NOT NULL,
-    `quanititySold` INTEGER NOT NULL,
+    `quantitySold` INTEGER NOT NULL,
     `categoryId` VARCHAR(191) NOT NULL,
     `stockId` VARCHAR(191) NOT NULL,
 

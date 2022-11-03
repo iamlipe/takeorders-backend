@@ -1,14 +1,30 @@
 import { User } from '@prisma/client';
 import { NewUser } from '../interfaces/User';
 import { prisma } from '../utils/connection';
+import { PrismaPromise } from '@prisma/client';
 
 export class UserRepository {
   private database = prisma;
 
-  public async create(newUser: NewUser): Promise<User | null> {
-    return this.database.user.create({
-      data: newUser,
-      select: { id: true, name: true, email: true, phone: true, password: true }
+  public async create(newUser: NewUser): Promise<User> {
+    return this.database.$transaction(async (t: any): Promise<User> => {
+      const user = await t.user.create({
+        data: newUser,
+      });
+  
+      await t.stock.create({
+        data: { userId: user.id }
+      })
+
+      await t.spent.create({
+        data: { userId: user.id }
+      })
+
+      await t.invoice.create({
+        data: { userId: user.id }
+      })
+
+      return user;
     });
   }
 

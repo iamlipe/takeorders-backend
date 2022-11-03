@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 model User {
@@ -91,7 +92,7 @@ model Product {
   name String
   image String?
   price Float
-  quanititySold Int
+  quantitySold Int
 
   categoryId String
   category Category @relation(fields: [categoryId], references: [id])

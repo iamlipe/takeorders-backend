@@ -11,11 +11,11 @@ export class CategoryController {
   }
 
   public create = async(req: Request, res: Response) => {
-    const { name } = req.body;
+    const newCategory = req.body;
 
-    await validateCreateCategory({ name });
+    await validateCreateCategory(newCategory);
 
-    const result = await this.CategoryService.create({ name });
+    const result = await this.CategoryService.create(newCategory);
 
     res.status(StatusCodes.CREATED).json(result);
   };
