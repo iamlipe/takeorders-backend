@@ -38,25 +38,21 @@ export class ProductService {
       throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregisrered category");
     }
 
-    const product = await this.ProductRepository.create(newProduct);
-
-    return product;
+    return this.ProductRepository.create(newProduct);
   }
 
   public async get(): Promise<Product []> {
     return this.ProductRepository.get();
   }
 
-  public async update({ id, updatedProduct }: UpdateProduct): Promise<Product> {
-    const exist = this.ProductRepository.getById(id);
+  public async update({ id, updateProduct }: UpdateProduct): Promise<Product> {
+    const exist = await this.ProductRepository.getById(id);
 
     if (!exist) {
       throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered product")
     }
 
-    const product = this.ProductRepository.update({ id, updatedProduct })
-
-    return product
+    return this.ProductRepository.update({ id, updateProduct })
   }
 
   public async remove({ id }: RemoveProduct): Promise<void> {

@@ -30,11 +30,11 @@ export class ProductController {
   }
 
   public update = async(req: Request, res: Response) => {
-    const updatedProduct: UpdateProduct = req.body
+    const updateProduct: UpdateProduct = req.body
 
-    await validateUpdateProduct(updatedProduct);
+    await validateUpdateProduct(updateProduct);
 
-    const result = await this.ProductService.update(updatedProduct);
+    const result = await this.ProductService.update(updateProduct);
 
     res.status(StatusCodes.OK).json(result);
   }
@@ -45,8 +45,6 @@ export class ProductController {
     await validateRemoveProduct(removeProduct);
 
     await this.ProductService.remove(removeProduct);
-
-    console.log(removeProduct);
 
     res.status(StatusCodes.OK).json(removeProduct);
   }
