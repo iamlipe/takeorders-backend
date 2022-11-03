@@ -8,6 +8,7 @@ import { LoginRouter } from './routes/login.routes';
 import { RegisterRouter } from './routes/register.routes';
 import { InvoiceRouter } from './routes/invoice.routes';
 import { SpentRouter } from './routes/spent.routes';
+import { StockRouter } from './routes/stock.routes';
 
 class App {
   public app: express.Express;
@@ -42,6 +43,7 @@ class App {
 
     this.app.use('/invoice', new InvoiceRouter().router);
     this.app.use('/spent', new SpentRouter().router);
+    this.app.use('/stock', new StockRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());
