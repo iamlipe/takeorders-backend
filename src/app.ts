@@ -3,6 +3,8 @@ import * as express from 'express';
 import { LoginRouter } from './routes/login.routes';
 import { RegisterRouter } from './routes/register.routes';
 import { Error } from './middlewares/error';
+import { Auth } from './middlewares/auth';
+import { InvoiceRouter } from './routes/invoice.routes';
 
 class App {
   public app: express.Express;
@@ -31,6 +33,11 @@ class App {
   private route(): void {
     this.app.use('/login', new LoginRouter().router);
     this.app.use('/register', new RegisterRouter().router);
+
+    this.app.use(Auth.headers());
+    this.app.use(Auth.jwt());
+
+    this.app.use('/invoice', new InvoiceRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());

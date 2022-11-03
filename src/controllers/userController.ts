@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { loginSchema } from '../schemas/login';
-import { registerSchema } from '../schemas/register';
+import { validateLogin } from '../validations/validateLogin';
+import { validateRegister } from '../validations/validateRegister';
 import { UserService } from '../services/userService';
 
 export class UserController {
@@ -14,7 +14,7 @@ export class UserController {
   public login = async(req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    await loginSchema.validate({ email, password });
+    await validateLogin({ email, password });
 
     const result = await this.UserService.login({ email, password });
 
@@ -46,7 +46,7 @@ export class UserController {
       confirmPassword
     };
 
-    await registerSchema.validate(newUser);
+    await validateRegister(newUser);
 
     const result = await this.UserService.register(newUser);
 
