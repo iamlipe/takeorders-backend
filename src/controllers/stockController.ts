@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { StockService } from "../services/stockService";
-import { validateCreateSpent } from '../validations/validateCreateSpent';
+import { validateCreateStock } from '../validations/validateCreateStock';
 
 export class StockController {
   private StockService: StockService;
@@ -13,9 +13,9 @@ export class StockController {
   public create = async(req: Request, res: Response) => {
     const { userId } = req.body;
 
-    await validateCreateSpent({ userId });
+    await validateCreateStock({ userId });
 
-    const result = await this.StockService.create(userId);
+    const result = await this.StockService.create({ userId });
 
     res.status(StatusCodes.CREATED).json(result);
   };

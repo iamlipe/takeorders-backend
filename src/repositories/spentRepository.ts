@@ -11,6 +11,12 @@ export class SpentRepository {
     });
   }
 
+  public async getByUserId(userId: string): Promise<Spent> {
+    return this.database.spent.findFirst({
+      where: { userId }
+    });
+  }
+
   public async get(): Promise<Spent[]> {
     return this.database.spent.findMany();
   }

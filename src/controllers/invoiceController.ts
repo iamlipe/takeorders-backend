@@ -15,7 +15,7 @@ export class InvoiceController {
 
     await validateCreateInvoice({ userId });
 
-    const result = await this.InvoiceService.create(userId);
+    const result = await this.InvoiceService.create({ userId });
 
     res.status(StatusCodes.CREATED).json(result);
   };
