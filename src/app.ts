@@ -48,6 +48,7 @@ class App {
     this.app.use('/stock', new StockRouter().router);
     this.app.use('/category', new CategoryRouter().router);
     this.app.use('/product', new ProductRouter().router);
+    this.app.use('/order', new ProductRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());

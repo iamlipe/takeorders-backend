@@ -27,10 +27,10 @@ export class ProductRepository {
     })
   }
 
-  public async update({ id, updatedProduct }: UpdateProduct): Promise<Product> {
+  public async update({ id, updateProduct }: UpdateProduct): Promise<Product> {
     return this.database.product.update({
       where: { id },
-      data: updatedProduct,
+      data: { ...updateProduct },
     })
   }
 

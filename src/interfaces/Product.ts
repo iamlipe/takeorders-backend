@@ -8,7 +8,7 @@ export interface NewProduct {
 
 export interface UpdateProduct {
   id: string;
-  updatedProduct: {
+  updateProduct: {
     name: string;
     image?: string;
     price: number;

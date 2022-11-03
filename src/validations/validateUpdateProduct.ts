@@ -3,7 +3,7 @@ import { NewProduct, UpdateProduct } from '../interfaces/Product';
 
 const schema = yup.object().shape({
   id: yup.string().required(),
-  updatedProduct: yup.object().shape({
+  updateProduct: yup.object().shape({
     name: yup.string().min(3).required(),
     image: yup.string(),
     price: yup.number().min(0).required(),
@@ -13,6 +13,6 @@ const schema = yup.object().shape({
   })
 });
 
-export const validateUpdateProduct = async({ id, updatedProduct }: UpdateProduct) => {
-  await schema.validate({ id, updatedProduct });
+export const validateUpdateProduct = async({ id, updateProduct }: UpdateProduct) => {
+  await schema.validate({ id, updateProduct });
 };
