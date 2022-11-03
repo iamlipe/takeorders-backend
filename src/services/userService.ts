@@ -16,10 +16,10 @@ export class UserService {
   }
 
   public async login(login: Login) {
-    const user = await this.UserRepository.getUserByEmail(login.email);
+    const user = await this.UserRepository.getByEmail(login.email);
     
     if(!user) {
-      throw new ErrorHandler(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Email not registered');
     }
 
     const comparePassword = await compare(login.password, user.password);
@@ -44,7 +44,7 @@ export class UserService {
   };
 
   public async register(data: Register) {
-    const alreadyExist = await this.UserRepository.getUserByEmail(data.email);
+    const alreadyExist = await this.UserRepository.getByEmail(data.email);
 
     if(alreadyExist) {
       throw new ErrorHandler(StatusCodes.CONFLICT, "This email is already registered");
@@ -57,7 +57,7 @@ export class UserService {
       password: await hash(data.password, 8)
     };
 
-    const user = await this.UserRepository.createUser(newUser);
+    const user = await this.UserRepository.create(newUser);
 
     const token = new JWT().sign({ id: user.id, name: user.name });
 
