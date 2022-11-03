@@ -11,6 +11,12 @@ export class StockRepository {
     });
   }
 
+  public async getByUserId(userId: string): Promise<Stock> {
+    return this.database.stock.findFirst({
+      where: { userId }
+    });
+  }
+
   public async get(): Promise<Stock[]> {
     return this.database.stock.findMany();
   }

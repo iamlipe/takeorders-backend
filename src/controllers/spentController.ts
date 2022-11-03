@@ -15,7 +15,7 @@ export class SpentController {
 
     await validateCreateSpent({ userId });
 
-    const result = await this.SpentService.create(userId);
+    const result = await this.SpentService.create({ userId });
 
     res.status(StatusCodes.CREATED).json(result);
   };

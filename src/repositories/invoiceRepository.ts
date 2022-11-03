@@ -11,6 +11,12 @@ export class InvoiceRepository {
     });
   }
 
+  public async getByUserId(userId: string): Promise<Invoice> {
+    return this.database.invoice.findFirst({
+      where: { userId }
+    });
+  }
+
   public async get(): Promise<Invoice[]> {
     return this.database.invoice.findMany();
   }
