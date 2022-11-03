@@ -1,10 +1,13 @@
 import 'express-async-errors';
 import * as express from 'express';
-import { LoginRouter } from './routes/login.routes';
-import { RegisterRouter } from './routes/register.routes';
+
 import { Error } from './middlewares/error';
 import { Auth } from './middlewares/auth';
+
+import { LoginRouter } from './routes/login.routes';
+import { RegisterRouter } from './routes/register.routes';
 import { InvoiceRouter } from './routes/invoice.routes';
+import { SpentRouter } from './routes/spent.routes';
 
 class App {
   public app: express.Express;
@@ -38,6 +41,7 @@ class App {
     this.app.use(Auth.jwt());
 
     this.app.use('/invoice', new InvoiceRouter().router);
+    this.app.use('/spent', new SpentRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());
