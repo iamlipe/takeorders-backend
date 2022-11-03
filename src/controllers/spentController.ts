@@ -11,11 +11,11 @@ export class SpentController {
   }
 
   public create = async(req: Request, res: Response) => {
-    const { userId } = req.body;
+    const newSpent = req.body;
 
-    await validateCreateSpent({ userId });
+    await validateCreateSpent(newSpent);
 
-    const result = await this.SpentService.create({ userId });
+    const result = await this.SpentService.create(newSpent);
 
     res.status(StatusCodes.CREATED).json(result);
   };

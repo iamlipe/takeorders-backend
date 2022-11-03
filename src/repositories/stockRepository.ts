@@ -20,4 +20,10 @@ export class StockRepository {
   public async get(): Promise<Stock[]> {
     return this.database.stock.findMany();
   }
+
+  public async getById(id: string): Promise<Stock> {
+    return this.database.stock.findFirst({
+      where: { id }
+    })
+  }
 }

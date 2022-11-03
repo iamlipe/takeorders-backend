@@ -11,11 +11,11 @@ export class StockController {
   }
 
   public create = async(req: Request, res: Response) => {
-    const { userId } = req.body;
+    const newStock = req.body;
 
-    await validateCreateStock({ userId });
+    await validateCreateStock(newStock);
 
-    const result = await this.StockService.create({ userId });
+    const result = await this.StockService.create(newStock);
 
     res.status(StatusCodes.CREATED).json(result);
   };

@@ -11,11 +11,11 @@ export class InvoiceController {
   }
 
   public create = async(req: Request, res: Response) => {
-    const { userId } = req.body;
+    const newInvoice = req.body;
 
-    await validateCreateInvoice({ userId });
+    await validateCreateInvoice(newInvoice);
 
-    const result = await this.InvoiceService.create({ userId });
+    const result = await this.InvoiceService.create(newInvoice);
 
     res.status(StatusCodes.CREATED).json(result);
   };

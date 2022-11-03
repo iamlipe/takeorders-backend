@@ -19,7 +19,7 @@ export class SpentService {
     const user = await this.UserRepository.getById(userId);
 
     if(!user) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'unregistered user');
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered user');
     }
 
     const spent = await this.SpentRepository.getByUserId(userId);

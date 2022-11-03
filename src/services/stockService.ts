@@ -19,7 +19,7 @@ export class StockService {
     const user = await this.UserRepository.getById(userId);
 
     if(!user) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'unregistered user');
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered user');
     }
 
     const stock = await this.StockRepository.getByUserId(userId);
