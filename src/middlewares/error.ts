@@ -35,8 +35,7 @@ export class Error {
 
   public static serverError(): ErrorRequestHandler {
     return (err, req, res, next) => {
-      console.log(err);
-      res.status(500).json({ message: 'server error'});
+      res.status(500).json(err);
     };
   }
 }

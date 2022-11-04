@@ -1,6 +1,8 @@
 import { resolve } from 'path';
 import { randomBytes } from 'crypto'
 import { diskStorage, FileFilterCallback, Options } from 'multer';
+import { ErrorHandler } from '../utils/errorHandler';
+import { StatusCodes } from 'http-status-codes';
 
 
 
@@ -27,7 +29,8 @@ export const multerConfig: Options = {
     if (allowMimes.includes(file.mimetype)) {
       callback(null, true);
     } else {
-      callback(new Error("Invalid file type"));
+      
+      throw new ErrorHandler(StatusCodes.BAD_REQUEST, "Extension file invalid")
     }
 
   }
