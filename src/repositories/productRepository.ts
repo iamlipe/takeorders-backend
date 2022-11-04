@@ -4,6 +4,7 @@ import {
   QueryProducts,
   RemoveProduct,
   UpdateProduct,
+  UpdateProductImage,
 } from '../interfaces/Product';
 import { prisma } from '../utils/connection';
 
@@ -14,6 +15,13 @@ export class ProductRepository {
     return this.database.product.create({
       data: { ...newProduct, quantitySold: 0 },
     });
+  }
+
+  public async updateImage({ id, url }: UpdateProductImage): Promise<void> {
+    await this.database.product.update({
+      where: { id },
+      data: { image: url }
+    })
   }
 
   public async get({ stockId }: QueryProducts): Promise<Product[]> {

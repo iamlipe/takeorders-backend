@@ -20,6 +20,11 @@ export interface UpdateProduct {
   updateProduct: NewProduct;
 }
 
+export interface UpdateProductImage {
+  id: string;
+  url: string;
+} 
+
 export interface RemoveProduct {
   id: string;
 }

@@ -1,5 +1,7 @@
 import 'express-async-errors';
 import * as express from 'express';
+import * as path from 'path'
+import * as morgan from 'morgan';
 
 import { Error } from './middlewares/error';
 import { Auth } from './middlewares/auth';
@@ -44,10 +46,11 @@ class App {
   private route(): void {
     this.app.use('/login', new LoginRouter().router);
     this.app.use('/register', new RegisterRouter().router);
-
+    this.app.use('/public/images', express.static(path.join(__dirname, "..", "public", "images")));
+  
     this.app.use(Auth.headers());
     this.app.use(Auth.jwt());
-
+    
     this.app.use('/invoice', new InvoiceRouter().router);
     this.app.use('/spent', new SpentRouter().router);
     this.app.use('/stock', new StockRouter().router);

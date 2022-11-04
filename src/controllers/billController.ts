@@ -43,6 +43,17 @@ export class BillController {
     res.status(StatusCodes.OK).json(result);
   }
 
+  public updateImage = async(req: Request, res: Response) => {
+    const { id } = req.params;
+    const { filename } = req.file;
+
+    const url = `${process.env.URL}/public/images/${filename.replace(/ /g, "_")}`
+
+    await this.BillService.updateImage({ id, url });
+
+    res.status(StatusCodes.OK).json({ id, url })
+  }
+
   public closeBill = async(req: Request, res: Response) => {
     const { id } = req.params;
 
