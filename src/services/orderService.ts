@@ -7,77 +7,65 @@ import {
   RemoveOrder,
   UpdateOrder,
 } from "../interfaces/Order";
-import { BillRepository } from "../repositories/billRepository";
 import { OrderRepository } from "../repositories/orderRepository";
-import { ProductRepository } from "../repositories/productRepository";
+import { BillService } from "./billService";
+import { ProductService } from "./productService";
 import { ErrorHandler } from "../utils/errorHandler";
 
 export class OrderService {
   private OrderRepository: OrderRepository;
 
-  private ProductRepository: ProductRepository;
+  private ProductService: ProductService;
 
-  private BillRepository: BillRepository;
+  private BillService: BillService;
 
   constructor() {
     this.OrderRepository = new OrderRepository;
-    this.ProductRepository = new ProductRepository;
-    this.BillRepository = new BillRepository();
+    this.ProductService = new ProductService;
+    this.BillService = new BillService();
   }
 
   public async create(newOrder: NewOrder): Promise<Order> {
-    const existProduct = await this.ProductRepository.getById(newOrder.productId);
+    await this.ProductService.existProduct(newOrder.productId);
 
-    if (!existProduct) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered product");
-    }
-
-    const existBill = await this.BillRepository.getById(newOrder.billId);
-
-    if (!existBill) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered bill");
-    }
+    await this.BillService.existBill(newOrder.billId);
 
     return this.OrderRepository.create(newOrder);
   }
 
   public async get(queryOrder: QueryOrder): Promise<Order []> {
-    const existBill = this.BillRepository.getById(queryOrder.billId);
-
-    if (!existBill) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered bill");
-    }
+    await this.BillService.existBill(queryOrder.billId);
 
     return this.OrderRepository.get(queryOrder);
   }
 
   public async getById({ id }: GetOrderById): Promise<Order> {
+    await this.existOrder(id);
+
     return this.OrderRepository.getById(id);
   }
 
-  public async update({ id, updateOrder }: UpdateOrder): Promise<Order> {
-    const existOrder = await this.OrderRepository.getById(id);
+  public async existOrder(id: string): Promise<void> {
+    const exist = await this.OrderRepository.getById(id);
 
-    if(!existOrder) {
+    if (!exist) { 
       throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered order");
     }
+  }
 
-    const existProduct = await this.ProductRepository.getById(updateOrder.productId);
+  public async update({ id, updateOrder }: UpdateOrder): Promise<Order> {
+    await this.OrderRepository.getById(id);
 
-    if (!existProduct) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered product")
-    }
+    await this.ProductService.existProduct(updateOrder.productId);
 
-    const existBill = await this.BillRepository.getById(updateOrder.billId);
-
-    if (!existBill) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered bill")
-    }
+    await this.BillService.existBill(updateOrder.billId);
 
     return this.OrderRepository.update({ id, updateOrder })
   }
 
   public async remove({ id }: RemoveOrder): Promise<void> {
+    await this.OrderRepository.getById(id);
+
     await this.OrderRepository.remove({ id });
   }
 }

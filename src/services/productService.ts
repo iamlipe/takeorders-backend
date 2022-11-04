@@ -11,67 +11,69 @@ import { CategoryRepository } from "../repositories/categoryRespository";
 import { ProductRepository } from "../repositories/productRepository";
 import { StockRepository } from "../repositories/stockRepository";
 import { ErrorHandler } from "../utils/errorHandler";
+import { StockService } from "./stockService";
+import { CategoryService } from './categoryService'
 
 export class ProductService {
   private ProductRepository: ProductRepository;
 
-  private StockRepository: StockRepository;
+  private StockService: StockService;
 
-  private CateogryRepository: CategoryRepository;
+  private CategoryService: CategoryService;
 
   constructor() {
     this.ProductRepository = new ProductRepository;
-    this.StockRepository = new StockRepository;
-    this.CateogryRepository = new CategoryRepository;
+    this.StockService = new StockService;
+    this.CategoryService = new CategoryService;
   }
 
   public async create(newProduct: NewProduct): Promise<Product> {
-    const alreadyExist = await this.ProductRepository.getByName(newProduct.name);
+    await this.alreadyExistProduct(newProduct.name);
 
-    if (alreadyExist) {
-      throw new ErrorHandler(StatusCodes.CONFLICT, "This product is already registered")
-    }
+    await this.StockService.existStock(newProduct.stockId);
 
-    const stockExist = await this.StockRepository.getById(newProduct.stockId);
-
-    if (!stockExist) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered stock");
-    }
-
-    const categoryExist = await this.CateogryRepository.getById(newProduct.categoryId);
-
-    if (!categoryExist) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregisrered category");
-    }
+    await this.CategoryService.existCategory(newProduct.categoryId);
 
     return this.ProductRepository.create(newProduct);
   }
 
   public async get(queryProducts: QueryProducts): Promise<Product []> {
-    const existStock = this.StockRepository.getById(queryProducts.stockId);
-
-    if (!existStock) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered stock');
-    }
+    await this.StockService.existStock(queryProducts.stockId);
 
     return this.ProductRepository.get(queryProducts);
   }
 
   public async getById({ id }: GetProductById): Promise<Product> {
+    await this.existProduct(id);
+
     return this.ProductRepository.getById(id);
   }
 
-  public async update({ id, updateProduct }: UpdateProduct): Promise<Product> {
+  public async existProduct(id: string): Promise<void> {
     const exist = await this.ProductRepository.getById(id);
 
-    if (!exist) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered product")
+    if (!exist) { 
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered product");
     }
+  }
+
+  public async alreadyExistProduct(name: string): Promise<void> {
+    const alreadyExist = await this.ProductRepository.getByName(name);
+
+    if (alreadyExist) {
+      throw new ErrorHandler(StatusCodes.CONFLICT, "Already a product with this name registered")
+    }
+  }
+
+  public async update({ id, updateProduct }: UpdateProduct): Promise<Product> {
+    await this.existProduct(id);
 
     return this.ProductRepository.update({ id, updateProduct })
   }
 
   public async remove({ id }: RemoveProduct): Promise<void> {
+    await this.existProduct(id);
+
     await this.ProductRepository.remove({ id })
   }
 }
