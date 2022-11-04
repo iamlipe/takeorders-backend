@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { OrderService } from "../services/orderService";
-import { validateCreateOrder } from '../validations/validateCreateOrder';
-import { validateUpdateOrder } from '../validations/validateUpdateOrder';
+import { validateOrder } from '../validations/validateOrder';
 
 export class OrderController {
   private OrderService: OrderService;
@@ -14,36 +13,41 @@ export class OrderController {
   public create = async(req: Request, res: Response) => {
     const newOrder = req.body;
 
-    await validateCreateOrder(newOrder);
+    await validateOrder(newOrder);
 
-    const result = this.OrderService.create(newOrder);
+    const result = await this.OrderService.create(newOrder);
 
     res.status(StatusCodes.CREATED).json(result);
   }
 
-  public get = async(_req: Request, res: Response) => {
-    const result = this.OrderService.get();
+  public get = async(req: Request, res: Response) => {
+    const result = await this.OrderService.get(req.query);
+
+    res.status(StatusCodes.OK).json(result);
+  }
+
+  public getById = async(req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await this.OrderService.getById({ id });
 
     res.status(StatusCodes.OK).json(result);
   }
 
   public update = async(req: Request, res: Response) => {
-    const updateOrder = req.body;
+    const { id } = req.params;
+    const updateOrder = req.body
 
-    await validateUpdateOrder(updateOrder);
-
-    const result  = this.OrderService.update(updateOrder)
+    const result = await this.OrderService.update({ id, updateOrder })
 
     res.status(StatusCodes.OK).json(result);
   }
 
   public remove = async(req: Request, res: Response) => {
-    const removeOrder = req.body;
+    const { id } = req.params;
 
-    await validateUpdateOrder(removeOrder);
+    await this.OrderService.remove({ id });
 
-    await this.OrderService.remove(removeOrder);
-
-    res.status(StatusCodes.OK).json(removeOrder);
+    res.status(StatusCodes.OK).json({ id });
   }
 }

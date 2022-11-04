@@ -34,10 +34,9 @@ export class Error {
   }
 
   public static serverError(): ErrorRequestHandler {
-    return (_err, _req, res) => {
-      res.status(500).json({
-        message: 'server error'
-      });
+    return (err, req, res, next) => {
+      console.log(err);
+      res.status(500).json({ message: 'server error'});
     };
   }
 }

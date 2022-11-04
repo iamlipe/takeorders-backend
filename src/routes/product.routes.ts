@@ -15,7 +15,8 @@ export class ProductRouter {
   private route(): void {
     this.router.post('/', this.ProductController.create);
     this.router.get('/', this.ProductController.get);
-    this.router.put('/', this.ProductController.update);
-    this.router.delete('/', this.ProductController.remove);
+    this.router.get('/:id', this.ProductController.getById);
+    this.router.put('/:id', this.ProductController.update);
+    this.router.delete('/:id', this.ProductController.remove);
   }
 }

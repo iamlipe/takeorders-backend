@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { NewProduct, RemoveProduct, UpdateProduct } from '../interfaces/Product';
+import { NewProduct } from '../interfaces/Product';
 import { ProductService } from "../services/productService";
-import { validateCreateProduct } from '../validations/validateCreateProduct';
-import { validateRemoveProduct } from '../validations/validateRemoveProduct';
-import { validateUpdateProduct } from '../validations/validateUpdateProduct';
+import { validateProduct } from '../validations/validateProduct';
+
 
 export class ProductController {
   private ProductService: ProductService;
@@ -16,36 +15,43 @@ export class ProductController {
   public create = async(req: Request, res: Response) => {
     const newProduct: NewProduct = req.body;
 
-    await validateCreateProduct(newProduct);
+    await validateProduct(newProduct);
 
     const result = await this.ProductService.create(newProduct);
 
     res.status(StatusCodes.CREATED).json(result);
   }
 
-  public get = async(_req: Request, res: Response) => {
-    const result = await this.ProductService.get();
+  public get = async(req: Request, res: Response) => {
+    const result = await this.ProductService.get(req.query);
+
+    res.status(StatusCodes.OK).json(result);
+  }
+
+  public getById = async(req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await this.ProductService.getById({ id })
 
     res.status(StatusCodes.OK).json(result);
   }
 
   public update = async(req: Request, res: Response) => {
-    const updateProduct: UpdateProduct = req.body
+    const { id } = req.params;
+    const updateProduct = req.body
 
-    await validateUpdateProduct(updateProduct);
+    await validateProduct(updateProduct, true)
 
-    const result = await this.ProductService.update(updateProduct);
+    const result = await this.ProductService.update({ id, updateProduct });
 
     res.status(StatusCodes.OK).json(result);
   }
 
   public remove = async(req: Request, res: Response) => {
-    const removeProduct: RemoveProduct = req.body;
+    const { id } = req.params;
 
-    await validateRemoveProduct(removeProduct);
+    await this.ProductService.remove({ id });
 
-    await this.ProductService.remove(removeProduct);
-
-    res.status(StatusCodes.OK).json(removeProduct);
+    res.status(StatusCodes.OK).json({ id });
   }
 }

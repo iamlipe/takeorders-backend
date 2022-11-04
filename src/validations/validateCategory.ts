@@ -5,6 +5,6 @@ const schema = yup.object().shape({
   name: yup.string().min(3).required(),
 });
 
-export const validateCreateCategory = async({ name }: NewCategory) => {
+export const validateCategory = async({ name }: NewCategory) => {
   await schema.validate({ name });
 };

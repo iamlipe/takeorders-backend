@@ -1,6 +1,12 @@
 import { Product } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { NewProduct, RemoveProduct, UpdateProduct } from "../interfaces/Product";
+import { 
+  GetProductById,
+  NewProduct,
+  QueryProducts,
+  RemoveProduct,
+  UpdateProduct,
+} from "../interfaces/Product";
 import { CategoryRepository } from "../repositories/categoryRespository";
 import { ProductRepository } from "../repositories/productRepository";
 import { StockRepository } from "../repositories/stockRepository";
@@ -41,8 +47,18 @@ export class ProductService {
     return this.ProductRepository.create(newProduct);
   }
 
-  public async get(): Promise<Product []> {
-    return this.ProductRepository.get();
+  public async get(queryProducts: QueryProducts): Promise<Product []> {
+    const existStock = this.StockRepository.getById(queryProducts.stockId);
+
+    if (!existStock) {
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered stock');
+    }
+
+    return this.ProductRepository.get(queryProducts);
+  }
+
+  public async getById({ id }: GetProductById): Promise<Product> {
+    return this.ProductRepository.getById(id);
   }
 
   public async update({ id, updateProduct }: UpdateProduct): Promise<Product> {

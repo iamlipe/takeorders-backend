@@ -15,5 +15,6 @@ export class SpentRouter {
   private route(): void {
     this.router.post('/', this.SpentController.create);
     this.router.get('/', this.SpentController.get);
+    this.router.get('/:id', this.SpentController.getById);
   }
 }

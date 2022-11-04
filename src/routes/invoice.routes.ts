@@ -15,5 +15,6 @@ export class InvoiceRouter {
   private route(): void {
     this.router.post('/', this.InvoiceController.create);
     this.router.get('/', this.InvoiceController.get);
+    this.router.get('/:id', this.InvoiceController.getById);
   }
 }

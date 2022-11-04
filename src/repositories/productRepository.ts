@@ -1,5 +1,10 @@
 import { Product } from '@prisma/client';
-import { NewProduct, RemoveProduct, UpdateProduct } from '../interfaces/Product';
+import {
+  NewProduct,
+  QueryProducts,
+  RemoveProduct,
+  UpdateProduct,
+} from '../interfaces/Product';
 import { prisma } from '../utils/connection';
 
 export class ProductRepository {
@@ -11,8 +16,10 @@ export class ProductRepository {
     });
   }
 
-  public async get(): Promise<Product[]> {
-    return this.database.product.findMany();
+  public async get({ stockId }: QueryProducts): Promise<Product[]> {
+    return this.database.product.findMany({
+      where: { stockId }
+    });
   }
 
   public async getByName(name: string): Promise<Product> {

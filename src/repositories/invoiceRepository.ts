@@ -1,4 +1,5 @@
 import { Invoice } from '@prisma/client';
+import { QueryInvoice } from '../interfaces/Invoice';
 import { prisma } from '../utils/connection';
 
 export class InvoiceRepository {
@@ -11,13 +12,15 @@ export class InvoiceRepository {
     });
   }
 
-  public async getByUserId(userId: string): Promise<Invoice> {
-    return this.database.invoice.findFirst({
+  public async get({ userId }: QueryInvoice): Promise<Invoice[]> {
+    return this.database.invoice.findMany({
       where: { userId }
     });
   }
 
-  public async get(): Promise<Invoice[]> {
-    return this.database.invoice.findMany();
+  public async getById(id): Promise<Invoice> {
+    return this.database.invoice.findFirst({
+      where: { id }
+    })
   }
 }
