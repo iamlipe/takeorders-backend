@@ -19,7 +19,6 @@ model User {
   stock Stock?
   spent Spent?
 
-  clients Client[]
   bills Bill[]
 
   @@map("users")
@@ -51,17 +50,6 @@ model Category {
   products Product[]
 
   @@map("categories")
-}
-
-model Client {
-  id  String @id @default(uuid())
-  name String
-  phone String?
-
-  userId String
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("clients")
 }
 
 model Invoice {
@@ -111,7 +99,7 @@ model Product {
 model Purchase {
   id  String @id @default(uuid())
   expanse String
-  description String
+  description String?
   totalPrice Float
   createdAt DateTime
   updatedAt DateTime
