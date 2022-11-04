@@ -45,7 +45,7 @@ class App {
   private route(): void {
     this.app.use('/login', new LoginRouter().router);
     this.app.use('/register', new RegisterRouter().router);
-    this.app.use('/public/images', express.static(path.join(__dirname, "..", "public", "images")));
+    this.app.use(express.static('public'));
   
     this.app.use(Auth.headers());
     this.app.use(Auth.jwt());
