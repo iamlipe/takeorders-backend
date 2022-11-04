@@ -26,13 +26,11 @@ export class ProductController {
     const { id } = req.params;
     const { filename } = req.file;
 
-    const url = `${process.env.URL}/public/images/${filename.replace(/ /g, "_")}`
-
-    console.log(url);
+    const url = `${process.env.URL}/public/${filename.replace(/ /g, "_")}`;
 
     await this.ProductService.updateImage({ id, url });
 
-    res.status(StatusCodes.OK).json({ id, url })
+    res.status(StatusCodes.OK).json({ id, url });
   }
 
   public get = async(req: Request, res: Response) => {

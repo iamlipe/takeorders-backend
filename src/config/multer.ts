@@ -5,10 +5,10 @@ import { diskStorage, FileFilterCallback, Options } from 'multer';
 
 
 export const multerConfig: Options = {
-  dest: resolve(__dirname, "..", "..", "public", "images"),
+  dest: resolve(__dirname, "..", "..", "public"),
   storage: diskStorage({
     destination: (_req, _file, callback) => {
-      callback(null, resolve(__dirname, "..", "..", "public", "images"));
+      callback(null, resolve(__dirname, "..", "..", "public"));
     },
     filename: (_req, file, callback) => {
       randomBytes(16, (err, hash) => {
