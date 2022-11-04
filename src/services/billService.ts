@@ -7,6 +7,7 @@ import {
   UpdateBill,
   GetBillById,
   CloseBill,
+  UpdateBillImage,
 } from "../interfaces/Bill";
 import { BillRepository } from "../repositories/billRepository";
 import { ErrorHandler } from "../utils/errorHandler";
@@ -52,6 +53,12 @@ export class BillService {
     await this.existBill(id);
 
     return this.BillRepository.update({ id, updateBill });
+  }
+
+  public async updateImage({ id, url }: UpdateBillImage): Promise<void> {
+    await this.existBill(id);
+
+    await this.BillRepository.updateImage({ id, url });
   }
 
   public async closeBill({ id }: CloseBill): Promise<void> {

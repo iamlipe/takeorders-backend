@@ -6,6 +6,7 @@ import {
   QueryProducts,
   RemoveProduct,
   UpdateProduct,
+  UpdateProductImage,
 } from "../interfaces/Product";
 import { CategoryRepository } from "../repositories/categoryRespository";
 import { ProductRepository } from "../repositories/productRepository";
@@ -35,6 +36,12 @@ export class ProductService {
     await this.CategoryService.existCategory(newProduct.categoryId);
 
     return this.ProductRepository.create(newProduct);
+  }
+
+  public async updateImage({ id, url }: UpdateProductImage): Promise<void> {
+    await this.existProduct(id);
+
+    await this.ProductRepository.updateImage({ id, url });
   }
 
   public async get(queryProducts: QueryProducts): Promise<Product []> {

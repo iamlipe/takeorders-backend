@@ -22,6 +22,11 @@ export interface UpdateBill {
   updateBill: NewBill;
 }
 
+export interface UpdateBillImage {
+  id: string;
+  url: string;
+}
+
 export interface CloseBill {
   id: string;
 }

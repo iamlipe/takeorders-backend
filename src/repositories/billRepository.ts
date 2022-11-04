@@ -1,5 +1,5 @@
 import { Bill, Order } from '@prisma/client';
-import { QueryBill, NewBill, RemoveBill, UpdateBill, CloseBill } from '../interfaces/Bill';
+import { QueryBill, NewBill, RemoveBill, UpdateBill, CloseBill, UpdateBillImage } from '../interfaces/Bill';
 import { prisma } from '../utils/connection';
 
 export class BillRepository {
@@ -32,6 +32,13 @@ export class BillRepository {
     return this.database.bill.update({
       where: { id },
       data: updateBill
+    })
+  }
+
+  public async updateImage({ id, url }: UpdateBillImage): Promise<void> {
+    await this.database.bill.update({
+      where: { id },
+      data: { image: url }
     })
   }
 
