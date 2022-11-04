@@ -28,6 +28,8 @@ export class ProductController {
 
     const url = `${process.env.URL}/public/images/${filename.replace(/ /g, "_")}`
 
+    console.log(url);
+
     await this.ProductService.updateImage({ id, url });
 
     res.status(StatusCodes.OK).json({ id, url })
