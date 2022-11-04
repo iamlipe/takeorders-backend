@@ -17,7 +17,7 @@ export class PurchaseRepository {
     })
   }
   
-  public async getById({ id }: GetPurchaseById): Promise<Purchase> {
+  public async getById(id: string): Promise<Purchase> {
     return this.database.purchase.findFirst({
       where: { id }
     })

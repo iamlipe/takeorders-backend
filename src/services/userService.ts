@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { compare, hash } from 'bcryptjs';
 import { StatusCodes } from 'http-status-codes';
 import { Login } from '../interfaces/Login';
@@ -16,17 +17,9 @@ export class UserService {
   }
 
   public async login(login: Login) {
-    const user = await this.UserRepository.getByEmail(login.email);
-    
-    if(!user) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Incorrect email or password');
-    }
+    const user = await this.getByEmail(login.email);
 
-    const comparePassword = await compare(login.password, user.password);
-
-    if (!comparePassword) {
-      throw new ErrorHandler(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
-    }
+    await this.comparePassword(login.password, user.password);
 
     const token = new JWT().sign({ id: user.id, name: user.name });
   
@@ -44,11 +37,7 @@ export class UserService {
   };
 
   public async register(data: Register) {
-    const alreadyExist = await this.UserRepository.getByEmail(data.email);
-
-    if(alreadyExist) {
-      throw new ErrorHandler(StatusCodes.CONFLICT, "This email is already registered");
-    }
+    await this.alreadyExistEmail(data.email);
 
     const newUser: NewUser = {
       name: data.name,
@@ -62,5 +51,39 @@ export class UserService {
     const token = new JWT().sign({ id: user.id, name: user.name });
 
     return { user, token };
+  }
+
+  public async getByEmail(email: string): Promise<User> {
+    const user = await this.UserRepository.getByEmail(email);
+    
+    if(!user) {
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Incorrect email or password');
+    }
+
+    return user;
+  }
+
+  public async existUser(id: string): Promise<void> {
+    const exist = await this.UserRepository.getById(id);
+
+    if (!exist) { 
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered user");
+    }
+  }
+
+  private async alreadyExistEmail(email: string): Promise<void> {
+    const alreadyExist = await this.UserRepository.getByEmail(email);
+
+    if(alreadyExist) {
+      throw new ErrorHandler(StatusCodes.CONFLICT, "This email is already registered");
+    }
+  }
+
+  private async comparePassword(password: string, hash: string): Promise<void> {
+    const comparePassword = await compare(password, hash);
+
+    if (!comparePassword) {
+      throw new ErrorHandler(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
+    }
   }
 }
