@@ -15,6 +15,7 @@ import { OrderRouter } from './routes/order.routes';
 import { BillRouter } from './routes/bill.routes';
 import { SaleRouter } from './routes/sale.routes';
 import { PurchaseRouter } from './routes/purchase.routes';
+import { ProfitRouter } from './routes/profit.routes';
 
 class App {
   public app: express.Express;
@@ -56,6 +57,7 @@ class App {
     this.app.use('/bill', new BillRouter().router);
     this.app.use('/sale', new SaleRouter().router);
     this.app.use('/purchase', new PurchaseRouter().router);
+    this.app.use('/profit', new ProfitRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());
