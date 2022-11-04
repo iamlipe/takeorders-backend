@@ -33,7 +33,7 @@ model Bill {
   image String?
   status Boolean
 
-  userId String @unique
+  userId String
   user User @relation(fields: [userId], references: [id])
 
   orders Order[]
@@ -44,6 +44,9 @@ model Bill {
 model Category {
   id  String @id @default(uuid())
   name String
+
+  stockId String
+  stock Stock @relation(fields: [stockId], references: [id])
 
   products Product[]
 
@@ -149,6 +152,7 @@ model Stock {
   userId String @unique
   user User @relation(fields: [userId], references: [id])
 
+  categories Category[]
   products Product[]
 
   @@map("stock")

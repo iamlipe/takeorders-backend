@@ -11,6 +11,8 @@ import { SpentRouter } from './routes/spent.routes';
 import { StockRouter } from './routes/stock.routes';
 import { CategoryRouter } from './routes/category.routes';
 import { ProductRouter } from './routes/product.routes';
+import { OrderRouter } from './routes/order.routes';
+import { BillRouter } from './routes/bill.routes';
 
 class App {
   public app: express.Express;
@@ -48,7 +50,8 @@ class App {
     this.app.use('/stock', new StockRouter().router);
     this.app.use('/category', new CategoryRouter().router);
     this.app.use('/product', new ProductRouter().router);
-    this.app.use('/order', new ProductRouter().router);
+    this.app.use('/order', new OrderRouter().router);
+    this.app.use('/bill', new BillRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());

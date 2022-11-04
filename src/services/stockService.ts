@@ -1,6 +1,6 @@
 import { Stock } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { NewStock } from "../interfaces/Stock";
+import { GetStockById, NewStock, QueryStock } from "../interfaces/Stock";
 import { StockRepository } from "../repositories/stockRepository";
 import { UserRepository } from "../repositories/userRepository";
 import { ErrorHandler } from "../utils/errorHandler";
@@ -22,7 +22,7 @@ export class StockService {
       throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered user');
     }
 
-    const stock = await this.StockRepository.getByUserId(userId);
+    const stock = await this.StockRepository.get({ userId });
 
     if (stock) {
       throw new ErrorHandler(StatusCodes.CONFLICT, 'This user already has a stock registered');
@@ -33,7 +33,17 @@ export class StockService {
     return result;
   }
 
-  public async get(): Promise<Stock []> {
-    return this.StockRepository.get();
+  public async get(queryStock: QueryStock): Promise<Stock []> {
+    const existUser = await this.UserRepository.getById(queryStock.userId);
+
+    if (!existUser) {
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered user");
+    }
+
+    return this.StockRepository.get(queryStock);
+  }
+
+  public async getById({id}: GetStockById): Promise<Stock> {
+    return this.StockRepository.getById(id);
   }
 }

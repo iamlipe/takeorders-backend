@@ -15,7 +15,8 @@ export class OrderRouter {
   private route(): void {
     this.router.post('/', this.OrderController.create);
     this.router.get('/', this.OrderController.get);
-    this.router.put('/', this.OrderController.update);
-    this.router.delete('/', this.OrderController.remove);
+    this.router.get('/:id', this.OrderController.getById);
+    this.router.put('/:id', this.OrderController.update);
+    this.router.delete('/:id', this.OrderController.remove);
   }
 }

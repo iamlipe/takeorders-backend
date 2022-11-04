@@ -1,10 +1,10 @@
 import * as yup from 'yup';
-import { NewSpent } from '../interfaces/Spent';
+import { NewInvoice } from '../interfaces/Invoice';
 
 const schema = yup.object().shape({
   userId: yup.string().required(),
 });
 
-export const validateCreateSpent = async({ userId }: NewSpent) => {
+export const validateInvoice = async({ userId }: NewInvoice) => {
   await schema.validate({ userId });
 };

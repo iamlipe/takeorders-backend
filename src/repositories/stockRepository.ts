@@ -1,4 +1,5 @@
 import { Stock } from '@prisma/client';
+import { QueryStock } from '../interfaces/Stock';
 import { prisma } from '../utils/connection';
 
 export class StockRepository {
@@ -11,14 +12,10 @@ export class StockRepository {
     });
   }
 
-  public async getByUserId(userId: string): Promise<Stock> {
-    return this.database.stock.findFirst({
+  public async get({ userId }: QueryStock): Promise<Stock[]> {
+    return this.database.stock.findMany({
       where: { userId }
     });
-  }
-
-  public async get(): Promise<Stock[]> {
-    return this.database.stock.findMany();
   }
 
   public async getById(id: string): Promise<Stock> {

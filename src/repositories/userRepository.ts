@@ -7,12 +7,14 @@ export class UserRepository {
   private database = prisma;
 
   public async create(newUser: NewUser): Promise<User> {
+    const categories = ['Bebida alcoólica', 'Bebida não alcoólica', 'Aperitivo', 'Outros'];
+
     return this.database.$transaction(async (t: any): Promise<User> => {
       const user = await t.user.create({
         data: newUser,
       });
   
-      await t.stock.create({
+      const stock = await t.stock.create({
         data: { userId: user.id }
       })
 
@@ -23,6 +25,15 @@ export class UserRepository {
       await t.invoice.create({
         data: { userId: user.id }
       })
+
+      await Promise.all(categories.map(async(category) => {
+        await t.category.create({
+          data: {
+            name: category,
+            stockId: stock.id
+          }
+        })
+      }));
 
       return user;
     });

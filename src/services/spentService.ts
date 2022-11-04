@@ -1,6 +1,6 @@
 import { Spent } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { NewSpent } from "../interfaces/Spent";
+import { GetSpentById, NewSpent, QuerySpent } from "../interfaces/Spent";
 import { SpentRepository } from "../repositories/spentRepository";
 import { UserRepository } from "../repositories/userRepository";
 import { ErrorHandler } from "../utils/errorHandler";
@@ -22,7 +22,7 @@ export class SpentService {
       throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered user');
     }
 
-    const spent = await this.SpentRepository.getByUserId(userId);
+    const spent = await this.SpentRepository.get({ userId });
 
     if (spent) {
       throw new ErrorHandler(StatusCodes.CONFLICT, 'This user already has a spent registered');
@@ -33,7 +33,17 @@ export class SpentService {
     return result;
   }
 
-  public async get(): Promise<Spent []> {
-    return this.SpentRepository.get();
+  public async get(querySpent: QuerySpent): Promise<Spent []> {
+    const existUser = await this.UserRepository.getById(querySpent.userId);
+
+    if (!existUser) {
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered user");
+    }
+
+    return this.SpentRepository.get(querySpent);
+  }
+
+  public async getById({ id }: GetSpentById): Promise<Spent> {
+    return this.SpentRepository.getById(id)
   }
 }

@@ -15,5 +15,6 @@ export class CategoryRouter {
   private route(): void {
     this.router.post('/', this.CategoryController.create);
     this.router.get('/', this.CategoryController.get);
+    this.router.get('/:id', this.CategoryController.getById);
   }
 }

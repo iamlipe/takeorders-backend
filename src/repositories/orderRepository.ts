@@ -1,5 +1,10 @@
 import { prisma } from '../utils/connection';
-import { NewOrder, RemoveOrder, UpdateOrder } from "../interfaces/Order";
+import { 
+  NewOrder,
+  QueryOrder,
+  RemoveOrder,
+  UpdateOrder,
+} from "../interfaces/Order";
 import { Order } from '@prisma/client';
 
 export class OrderRepository {
@@ -11,8 +16,10 @@ export class OrderRepository {
     })
   }
 
-  public async get(): Promise<Order []> {
-    return this.database.order.findMany();
+  public async get({ billId }: QueryOrder): Promise<Order []> {
+    return this.database.order.findMany({
+      where: { billId }
+    });
   }
 
   public async getById(id: string): Promise<Order> {

@@ -1,4 +1,5 @@
 import { Spent } from '@prisma/client';
+import { QuerySpent } from '../interfaces/Spent';
 import { prisma } from '../utils/connection';
 
 export class SpentRepository {
@@ -11,13 +12,15 @@ export class SpentRepository {
     });
   }
 
-  public async getByUserId(userId: string): Promise<Spent> {
-    return this.database.spent.findFirst({
+  public async get({ userId }: QuerySpent): Promise<Spent []> {
+    return this.database.spent.findMany({
       where: { userId }
     });
   }
 
-  public async get(): Promise<Spent[]> {
-    return this.database.spent.findMany();
+  public async getById(id: string): Promise<Spent> {
+    return this.database.spent.findFirst({
+      where: { id }
+    })
   }
 }

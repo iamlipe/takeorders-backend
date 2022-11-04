@@ -15,5 +15,6 @@ export class StockRouter {
   private route(): void {
     this.router.post('/', this.StockController.create);
     this.router.get('/', this.StockController.get);
+    this.router.get('/:id', this.StockController.getById);
   }
 }

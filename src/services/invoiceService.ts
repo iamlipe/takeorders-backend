@@ -1,6 +1,6 @@
 import { Invoice } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
-import { NewInvoice } from "../interfaces/Invoice";
+import { GetInvoiceById, NewInvoice, QueryInvoice } from "../interfaces/Invoice";
 import { InvoiceRepository } from "../repositories/invoiceRepository";
 import { UserRepository } from "../repositories/userRepository";
 import { ErrorHandler } from "../utils/errorHandler";
@@ -22,7 +22,7 @@ export class InvoiceService {
       throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered user');
     }
 
-    const invoice = await this.InvoiceRepository.getByUserId(userId);
+    const invoice = await this.InvoiceRepository.getById(userId);
 
     if (invoice) {
       throw new ErrorHandler(StatusCodes.CONFLICT, 'This user already has a invoice registered');
@@ -33,7 +33,17 @@ export class InvoiceService {
     return result;
   }
 
-  public async get(): Promise<Invoice []> {
-    return this.InvoiceRepository.get();
+  public async get(queryInvoice: QueryInvoice): Promise<Invoice []> {
+    const existUser = this.UserRepository.getById(queryInvoice.userId);
+
+    if (!existUser) {
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Unregistered user');
+    }
+
+    return this.InvoiceRepository.get(queryInvoice);
+  }
+
+  public async getById({ id }: GetInvoiceById): Promise<Invoice> {
+    return this.InvoiceRepository.getById(id);
   }
 }

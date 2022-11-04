@@ -19,7 +19,7 @@ export class UserService {
     const user = await this.UserRepository.getByEmail(login.email);
     
     if(!user) {
-      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Email not registered');
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, 'Incorrect email or password');
     }
 
     const comparePassword = await compare(login.password, user.password);
