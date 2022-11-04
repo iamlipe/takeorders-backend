@@ -37,14 +37,20 @@ export class BillRepository {
 
   public async closeBill({ id }: CloseBill): Promise<void> {
     return this.database.$transaction(async (t: any): Promise<void> => {
-      const { orders } = await t.bill.update({
+      const { orders, userId, name } = await t.bill.update({
         where: { id },
         data: { status: false },
-        select: { orders: true }
+        select: { orders: true, userId: true, name: true }
       })
 
+      const { id: invoiceId } = await t.invoice.findFirst({
+        where: { userId }
+      })
+
+      let totalPrice = 0;
+
       await Promise.all(orders.map(async(order: Order) => {
-        const { quantitySold } = await t.product.findFirst({
+        const { quantitySold, price } = await t.product.findFirst({
           where: { id: order.productId }
         })
 
@@ -52,7 +58,19 @@ export class BillRepository {
           where: { id: order.productId },
           data: {  quantitySold: quantitySold + order.quantity }
         })
+
+        totalPrice += price * order.quantity;
       }));
+
+      await t.sale.create({
+        data: {
+          name: `Venda ${name.toLowerCase()}`,
+          totalPrice,
+          invoiceId,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      })
     })
   }
 

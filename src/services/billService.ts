@@ -10,7 +10,6 @@ export class BillService {
 
   private UserRepository: UserRepository;
 
-
   constructor() {
     this.BillRepository = new BillRepository;
     this.UserRepository = new UserRepository;
