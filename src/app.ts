@@ -1,7 +1,6 @@
 import 'express-async-errors';
 import * as express from 'express';
 import * as path from 'path'
-import * as morgan from 'morgan';
 
 import { Error } from './middlewares/error';
 import { Auth } from './middlewares/auth';
