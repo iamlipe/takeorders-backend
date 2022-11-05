@@ -45,9 +45,9 @@ export class BillController {
 
   public updateImage = async(req: Request, res: Response) => {
     const { id } = req.params;
-    const { filename } = req.file;
+    const { key } = req.file as any;
 
-    const url = `${process.env.URL}/public/images/${filename.replace(/ /g, "_")}`
+    const url = `${process.env.FILE_URL}/${key}`;
 
     await this.BillService.updateImage({ id, url });
 
