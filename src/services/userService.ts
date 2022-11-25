@@ -27,13 +27,15 @@ export class UserService {
   }
 
   public async validate(hashToken: string) {
-    const result = new JWT().verify(hashToken) as TokenData;
-
-    if (!result) {
+    const user = new JWT().verify(hashToken) as TokenData;
+    
+    if (!user) {
       throw new ErrorHandler(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
     };
 
-    return result;
+    const token = new JWT().sign({ id: user.id, name: user.name });
+
+    return token;
   };
 
   public async register(data: Register) {

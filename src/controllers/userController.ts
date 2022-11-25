@@ -30,9 +30,9 @@ export class UserController {
         .json({ message: 'Token not found' });
     }
 
-    const result = await this.UserService.validate(authorization);
+    const token = await this.UserService.validate(authorization);
 
-    res.status(StatusCodes.OK).send(result);
+    res.status(StatusCodes.OK).json({ token });
   };
 
   public register = async(req: Request, res: Response) => {
