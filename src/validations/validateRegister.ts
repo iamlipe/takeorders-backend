@@ -4,10 +4,7 @@ import { Register } from '../interfaces/Register';
 const schema = yup.object().shape({
   name: yup.string().required().min(3),
   email: yup.string().email().required(),
-  phone: yup.string().matches(
-    /^\(([0-9]{2})\) ([0-9]{4,5})-([0-9]{4})$/,
-    'Invalid phone number',
-  ),
+  phone: yup.string().length(11),
   password: yup.string().required(),
   confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
   typeAuth: yup.string().matches(/(google|apple)/),
