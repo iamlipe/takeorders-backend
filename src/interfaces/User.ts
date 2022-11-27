@@ -3,4 +3,6 @@ export interface NewUser {
   email: string;
   phone?: string;
   password: string;
+  typeAuth: 'google' | 'apple' | null;
+  acceptedTheTerms: boolean;
 }

@@ -17,6 +17,9 @@ import { BillRouter } from './routes/bill.routes';
 import { SaleRouter } from './routes/sale.routes';
 import { PurchaseRouter } from './routes/purchase.routes';
 import { ProfitRouter } from './routes/profit.routes';
+import { PlanRouter } from './routes/plan.routes';
+import { BenefitRouter } from './routes/benefit.routes'
+import { SignatureRouter } from './routes/signature.routes';
 
 class App {
   public app: express.Express;
@@ -45,6 +48,8 @@ class App {
   private route(): void {
     this.app.use('/login', new LoginRouter().router);
     this.app.use('/register', new RegisterRouter().router);
+    this.app.use('/plan', new PlanRouter().router);
+    this.app.use('/benefit', new BenefitRouter().router);
     this.app.use('/files', express.static(path.join(__dirname, "..", "tmp", "uploads")));
   
     this.app.use(Auth.headers());
@@ -60,6 +65,7 @@ class App {
     this.app.use('/sale', new SaleRouter().router);
     this.app.use('/purchase', new PurchaseRouter().router);
     this.app.use('/profit', new ProfitRouter().router);
+    this.app.use('/signature', new SignatureRouter().router);
 
     this.app.use(Error.yupError());
     this.app.use(Error.domainError());

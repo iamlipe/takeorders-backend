@@ -39,13 +39,19 @@ export class UserService {
   };
 
   public async register(data: Register) {
+    if (!data.acceptedTheTerms) {
+      throw new ErrorHandler(StatusCodes.NOT_ACCEPTABLE, 'User did not accept the terms')
+    }
+
     await this.alreadyExistEmail(data.email);
 
     const newUser: NewUser = {
       name: data.name,
       email: data.email,
       phone: data.phone,
-      password: await hash(data.password, 8)
+      password: await hash(data.password, 8),
+      typeAuth: data.typeAuth === 'google' || data.typeAuth === "apple" ? data.typeAuth : null,
+      acceptedTheTerms: data.acceptedTheTerms,
     };
 
     const user = await this.UserRepository.create(newUser);

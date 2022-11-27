@@ -4,4 +4,6 @@ export interface Register {
   phone?: string;
   password: string;
   confirmPassword: string;
+  typeAuth: 'google' | 'apple';
+  acceptedTheTerms: boolean;
 }

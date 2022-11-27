@@ -1,7 +1,6 @@
 import { User } from '@prisma/client';
 import { NewUser } from '../interfaces/User';
 import { prisma } from '../utils/connection';
-import { PrismaPromise } from '@prisma/client';
 
 export class UserRepository {
   private database = prisma;
@@ -48,7 +47,6 @@ export class UserRepository {
   public async getById(id: string): Promise<User | null> {
     return this.database.user.findFirst({
       where: { id },
-      select: { id: true, name: true, email: true, phone: true, password: true }
     });
   }
 }

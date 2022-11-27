@@ -9,9 +9,12 @@ const schema = yup.object().shape({
     'Invalid phone number',
   ),
   password: yup.string().required(),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  typeAuth: yup.string().matches(/(google|apple)/),
+  acceptedTheTerms: yup.boolean().required(),
 });
 
 export const validateRegister = async(register: Register) => {
   await schema.validate(register);
 };
+

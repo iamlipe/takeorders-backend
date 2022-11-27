@@ -21,6 +21,7 @@ export class UserController {
     res.status(StatusCodes.OK).json(result);
   };
 
+
   public validate = async(req: Request, res: Response) => {
     const { authorization } = req.headers;
 
@@ -44,4 +45,5 @@ export class UserController {
 
     res.status(StatusCodes.CREATED).json(result);
   };
+
 }

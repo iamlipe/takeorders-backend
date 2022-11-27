@@ -14,14 +14,57 @@ model User {
   email String
   password String
   phone String?
+  typeAuth String?
+  acceptedTheTerms Boolean
+
+  planId String?
 
   invoice Invoice?
   stock Stock?
   spent Spent?
 
   bills Bill[]
+  signatures Signature[]
 
   @@map("users")
+}
+
+model Plan {
+  id  String @id @default(uuid())
+  name String
+  price Float
+
+  benefits Benefit[]
+  signatures Signature[]
+
+  @@map("plans")
+}
+
+model Benefit {
+  id  String @id @default(uuid())
+  name String
+  description String?
+
+  planId String
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@map("benefits")
+}
+
+model Signature {
+  id  String @id @default(uuid())
+  canRenew Boolean
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  planId String
+  plan Plan @relation(fields: [planId], references: [id])
+
+  acquiredAt DateTime
+  expiresAt DateTime
+
+  @@map("signatures")
 }
 
 model Bill {
@@ -101,6 +144,7 @@ model Purchase {
   expanse String
   description String?
   totalPrice Float
+
   createdAt DateTime
   updatedAt DateTime
 

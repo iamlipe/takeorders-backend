@@ -8,9 +8,7 @@ import {
   UpdateProduct,
   UpdateProductImage,
 } from "../interfaces/Product";
-import { CategoryRepository } from "../repositories/categoryRespository";
 import { ProductRepository } from "../repositories/productRepository";
-import { StockRepository } from "../repositories/stockRepository";
 import { ErrorHandler } from "../utils/errorHandler";
 import { StockService } from "./stockService";
 import { CategoryService } from './categoryService'

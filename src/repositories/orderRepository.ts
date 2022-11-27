@@ -18,7 +18,7 @@ export class OrderRepository {
 
   public async get({ billId }: QueryOrder): Promise<Order []> {
     return this.database.order.findMany({
-      where: { billId }
+      where: { billId },
     });
   }
 
