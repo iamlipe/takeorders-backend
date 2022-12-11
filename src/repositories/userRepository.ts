@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
-import { NewUser } from '../interfaces/User';
+import { Plan, User } from '@prisma/client';
+import { NewUser, Subscription } from '../interfaces/User';
 import { prisma } from '../utils/connection';
 
 export class UserRepository {
@@ -36,6 +36,13 @@ export class UserRepository {
 
       return user;
     });
+  }
+
+  public async subscription({ userId, planId }: Subscription): Promise<User> {
+    return this.database.user.update({
+      where: { id: userId },
+      data: { planId }
+    })
   }
 
   public async getByEmail(email: string): Promise<User | null> {

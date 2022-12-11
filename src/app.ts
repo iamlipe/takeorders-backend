@@ -1,6 +1,7 @@
 import 'express-async-errors';
 import * as express from 'express';
 import * as path from 'path'
+import * as cors from 'cors';
 
 import { Error } from './middlewares/error';
 import { Auth } from './middlewares/auth';
@@ -20,7 +21,7 @@ import { ProfitRouter } from './routes/profit.routes';
 import { PlanRouter } from './routes/plan.routes';
 import { BenefitRouter } from './routes/benefit.routes'
 import { SignatureRouter } from './routes/signature.routes';
-
+import { PaymentRouter } from './routes/payment.routes';
 class App {
   public app: express.Express;
 
@@ -33,15 +34,13 @@ class App {
   private config():void {
     const accessControl: express.RequestHandler = (_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Methods',
-        'GET,POST,DELETE,OPTIONS,PUT,PATCH'
-      );
+      res.header('Access-Control-Allow-Methods', '*');
       res.header('Access-Control-Allow-Headers', '*');
       next();
     };
 
     this.app.use(accessControl);
+    this.app.use(cors());
     this.app.use(express.json());
   }
 
@@ -50,8 +49,9 @@ class App {
     this.app.use('/register', new RegisterRouter().router);
     this.app.use('/plan', new PlanRouter().router);
     this.app.use('/benefit', new BenefitRouter().router);
+    this.app.use('/payment', new PaymentRouter().router);
     this.app.use('/files', express.static(path.join(__dirname, "..", "tmp", "uploads")));
-  
+    
     this.app.use(Auth.headers());
     this.app.use(Auth.jwt());
     

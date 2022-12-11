@@ -2,6 +2,7 @@ import { Plan } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import {
   GetPlanById,
+  GetPlanByName,
   NewPlan,
   RemovePlan,
   UpdatePlan,
@@ -30,6 +31,9 @@ export class PlanService {
     return this.PlanRepository.getById(id);
   }
 
+  public async getByName({ name }: GetPlanByName): Promise<Plan> {
+    return this.PlanRepository.getByName(name);
+  }
   
   public async update({ id, updatePlan }: UpdatePlan): Promise<Plan> {
     await this.existPlan(id);
@@ -47,6 +51,14 @@ export class PlanService {
     const exist = await this.PlanRepository.getById(id);
 
     if (!exist) { 
+      throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered plan");
+    }
+  }
+
+  public async existPlanName(name: string): Promise<void> {
+    const exist = await this.PlanRepository.getByName(name);
+
+    if (!exist) {
       throw new ErrorHandler(StatusCodes.NOT_FOUND, "Unregistered plan");
     }
   }

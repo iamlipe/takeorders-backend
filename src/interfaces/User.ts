@@ -6,3 +6,8 @@ export interface NewUser {
   typeAuth: 'google' | 'apple' | null;
   acceptedTheTerms: boolean;
 }
+
+export interface Subscription {
+  userId: string;
+  planId: string;
+}

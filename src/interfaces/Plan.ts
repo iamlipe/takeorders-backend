@@ -7,6 +7,10 @@ export interface GetPlanById {
   id: string;
 }
 
+export interface GetPlanByName {
+  name: string;
+}
+
 export interface UpdatePlan {
   id: string;
   updatePlan: NewPlan;

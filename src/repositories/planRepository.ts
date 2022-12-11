@@ -27,6 +27,12 @@ export class PlanRepository {
     })
   }
 
+  public async getByName(name: string): Promise<Plan> {
+    return this.database.plan.findFirst({
+      where: { name }
+    })
+  }
+
   public async update({ id, updatePlan }: UpdatePlan): Promise<Plan> {
     return this.database.plan.update({
       where: { id },

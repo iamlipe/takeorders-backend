@@ -4,16 +4,20 @@ import { StatusCodes } from 'http-status-codes';
 import { Login } from '../interfaces/Login';
 import { Register } from '../interfaces/Register';
 import { TokenData } from '../interfaces/Token';
-import { NewUser } from '../interfaces/User';
+import { NewUser, Subscription } from '../interfaces/User';
 import { UserRepository } from '../repositories/userRepository';
+import { PlanService } from './planService';
 import { ErrorHandler } from '../utils/errorHandler';
 import JWT from '../utils/jwt';
 
 export class UserService {
   private UserRepository: UserRepository;
 
+  private PlanService: PlanService; 
+
   constructor() {
     this.UserRepository = new UserRepository;
+    this.PlanService = new PlanService;
   }
 
   public async login(login: Login) {
@@ -59,6 +63,14 @@ export class UserService {
     const token = new JWT().sign({ id: user.id, name: user.name });
 
     return { user, token };
+  }
+
+  public async subscription({ userId, planId }: Subscription): Promise<User> {
+    await this.existUser(userId)
+
+    await this.PlanService.existPlan(planId);
+
+    return this.UserRepository.subscription({ userId, planId });
   }
 
   public async getByEmail(email: string): Promise<User> {
